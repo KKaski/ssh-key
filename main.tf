@@ -15,32 +15,6 @@ provider "ibm" {
 }
 
 ##############################################################################
-# IBM SSH Key: For connecting to VMs
-##############################################################################
-resource "ibm_compute_ssh_key" "test_ssh_key1" {
-  label = "${var.key_label}"
-  notes = "${var.key_note}"
-  # Public key, so this is completely safe
-  public_key = "${var.public_key}"
-}
-
-##############################################################################
-# Create Servers with the SSH keys
-##############################################################################
-resource "ibm_compute_vm_instance" "my_server_1" {
-  hostname          = "host-b.example.com"
-  domain            = "example.com"
-  ssh_keys          = ["${ibm_compute_ssh_key.test_ssh_key1.id}"]
-  os_reference_code = "CENTOS_6_64"
-  datacenter        = "${var.datacenter}"
-  network_speed     = 10
-  cores             = 1
-  memory            = 1024
-  hourly_billing    = true
-}
-
-
-##############################################################################
 # Variables
 ##############################################################################
 variable bxapikey {
@@ -63,6 +37,31 @@ variable key_label {
 }
 variable key_note {
   description = "A note for the SSH key that gets created."
+}
+
+##############################################################################
+# IBM SSH Key: For connecting to VMs
+##############################################################################
+resource "ibm_compute_ssh_key" "test_ssh_key1" {
+  label = "${var.key_label}"
+  notes = "${var.key_note}"
+  # Public key, so this is completely safe
+  public_key = "${var.public_key}"
+}
+
+##############################################################################
+# Create Servers with the SSH keys
+##############################################################################
+resource "ibm_compute_vm_instance" "my_server_1" {
+  hostname          = "host-b.example.com"
+  domain            = "example.com"
+  ssh_keys          = ["${ibm_compute_ssh_key.test_ssh_key1.id}"]
+  os_reference_code = "CENTOS_6_64"
+  datacenter        = "${var.datacenter}"
+  network_speed     = 10
+  cores             = 1
+  memory            = 1024
+  hourly_billing    = true
 }
 
 ##############################################################################
