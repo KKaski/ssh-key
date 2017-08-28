@@ -25,6 +25,22 @@ resource "ibm_compute_ssh_key" "ssh_key" {
 }
 
 ##############################################################################
+# Create Servers with the SSH keys
+##############################################################################
+resource "ibm_compute_vm_instance" "my_server_1" {
+  hostname          = "host-b.example.com"
+  domain            = "example.com"
+  ssh_keys          = [123456, "${ibm_compute_ssh_key.ssh_key.id}"]
+  os_reference_code = "CENTOS_6_64"
+  datacenter        = "ams01"
+  network_speed     = 10
+  cores             = 1
+  memory            = 1024
+  hourly_billing    = true
+}
+
+
+##############################################################################
 # Variables
 ##############################################################################
 variable bxapikey {
@@ -54,20 +70,4 @@ variable key_note {
 ##############################################################################
 output "ssh_key_id" {
   value = "${ibm_compute_ssh_key.ssh_key.id}"
-}
-
-##############################################################################
-# Create Servers
-##############################################################################
-# Create a virtual server with the SSH key.
-resource "ibm_compute_vm_instance" "my_server_1" {
-  hostname          = "host-b.example.com"
-  domain            = "example.com"
-  ssh_keys          = [123456, "${ibm_compute_ssh_key.ssh_key.id}"]
-  os_reference_code = "CENTOS_6_64"
-  datacenter        = "ams01"
-  network_speed     = 10
-  cores             = 1
-  memory            = 1024
-  hourly_billing    = true
 }
