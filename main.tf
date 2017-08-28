@@ -56,7 +56,7 @@ resource "ibm_compute_ssh_key" "public_key" {
 ##############################################################################
 # Create Servers with the SSH keys
 ##############################################################################
-resource "ibm_compute_vm_instance" "my_server_1" {
+resource "ibm_compute_vm_instance" "node" {
   count                = "${var.node_count}"
   hostname             = "kktest-${count.index+1}"
   domain               = "test.local"
