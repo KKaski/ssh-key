@@ -38,6 +38,10 @@ variable key_label {
 variable key_note {
   description = "A note for the SSH key that gets created."
 }
+variable node_count {
+  default=1
+  description = "Number of nodes to create"
+}
 
 ##############################################################################
 # IBM SSH Key: For connecting to VMs
@@ -53,15 +57,19 @@ resource "ibm_compute_ssh_key" "public_key" {
 # Create Servers with the SSH keys
 ##############################################################################
 resource "ibm_compute_vm_instance" "my_server_1" {
-  hostname          = "kktest.nordea.local"
-  domain            = "nordea.local"
-  ssh_key_ids       = ["${ibm_compute_ssh_key.public_key.id}"]
-  os_reference_code = "CENTOS_6_64"
-  datacenter        = "${var.datacenter}"
-  network_speed     = 10
-  cores             = 1
-  memory            = 1024
-  hourly_billing    = true
+  count                = "${var.node_count}"
+  hostname             = "kktest-${count.index+1}"
+  domain               = "test.local"
+  ssh_key_ids          = ["${ibm_compute_ssh_key.public_key.id}"]
+  os_reference_code    = "CENTOS_6_64"
+  datacenter           = "${var.datacenter}"
+  network_speed        = 10
+  cores                = 1
+  memory               = 1024
+  hourly_billing       = true
+  private_network_only = true
+  local_disk           = true
+  hourly_billing       = true
 }
 
 ##############################################################################
@@ -70,3 +78,11 @@ resource "ibm_compute_vm_instance" "my_server_1" {
 output "ssh_key_id" {
   value = "${ibm_compute_ssh_key.public_key.id}"
 }
+
+output "node_ids" {
+  value = "[${ibmcloud_infra_virtual_guest.node.*.id}]"
+  }
+
+output "node_ip_addresses" {
+  value = "[${ibmcloud_infra_virtual_guest.node.*.ipv4_address}]"
+  }
