@@ -30,7 +30,7 @@ resource "ibm_compute_ssh_key" "ssh_key" {
 resource "ibm_compute_vm_instance" "my_server_1" {
   hostname          = "host-b.example.com"
   domain            = "example.com"
-  ssh_keys          = [123456, "${ibm_compute_ssh_key.ssh_key.id}"]
+  ssh_keys          = [123456, "${ibm_compute_ssh_key.${var.key_label}.id}"]
   os_reference_code = "CENTOS_6_64"
   datacenter        = "${var.datacenter}"
   network_speed     = 10
