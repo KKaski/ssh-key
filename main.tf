@@ -63,3 +63,10 @@ resource "ibm_compute_vm_instance" "my_server_1" {
   memory            = 1024
   hourly_billing    = true
 }
+
+##############################################################################
+# Outputs
+##############################################################################
+output "ssh_key_id" {
+  value = "${ibm_compute_ssh_key.test_ssh_key1.id}"
+}
