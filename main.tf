@@ -80,9 +80,9 @@ output "ssh_key_id" {
 }
 
 output "node_ids" {
-  value = ["${ibm_compute_vm_instance.*.id}"]
+  value = ["${ibm_compute_vm_instance.node.*.id}"]
   }
 
 output "node_ip_addresses" {
-  value = ["${ibm_compute_vm_instance.*.ipv4_address}"]
+  value = ["${ibm_compute_vm_instance.node.*.ipv4_address}"]
   }
