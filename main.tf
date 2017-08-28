@@ -53,8 +53,8 @@ resource "ibm_compute_ssh_key" "public_key" {
 # Create Servers with the SSH keys
 ##############################################################################
 resource "ibm_compute_vm_instance" "my_server_1" {
-  hostname          = ""
-  domain            = ""
+  hostname          = "kktest.nordea.local"
+  domain            = "nordea.local"
   ssh_key_ids       = ["${ibm_compute_ssh_key.public_key.id}"]
   os_reference_code = "CENTOS_6_64"
   datacenter        = "${var.datacenter}"
