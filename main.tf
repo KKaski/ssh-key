@@ -42,7 +42,7 @@ variable key_note {
 ##############################################################################
 # IBM SSH Key: For connecting to VMs
 ##############################################################################
-resource "ibm_compute_ssh_key" "test_ssh_key1" {
+resource "ibm_compute_ssh_key" "public_key" {
   label = "${var.key_label}"
   notes = "${var.key_note}"
   # Public key, so this is completely safe
@@ -55,7 +55,7 @@ resource "ibm_compute_ssh_key" "test_ssh_key1" {
 resource "ibm_compute_vm_instance" "my_server_1" {
   hostname          = ""
   domain            = ""
-  ssh_keys          = ["${data.ibm_compute_ssh_key.test_ssh_key1.id}"]
+  ssh_keys          = ["${data.ibm_compute_ssh_key.public_key.id}"]
   os_reference_code = "CENTOS_6_64"
   datacenter        = "${var.datacenter}"
   network_speed     = 10
