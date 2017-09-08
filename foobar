@@ -1,0 +1,3 @@
+fsm-osl0101a-fz.adn.networklayer.com\IBM02SEV1412549_4\data01
+
+Get-SmbShare -Name jako | Set-SmbShare -SecurityDescriptor 'O:BAG:DUD:(A;;FA;;;AN)(A;;FA;;;WD)'

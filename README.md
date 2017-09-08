@@ -1,4 +1,4 @@
-# Terraform Bluemix SSH Key
+# Terraform Bluemix SSH Key and servers
 A Terraform configuration for creating an [IBM Cloud SSH Key](https://ibm-bluemix.github.io/tf-ibm-docs/v0.4.0/r/compute_ssh_key.html) (`ibm_compute_ssh_key`). This will create a SSH key in the specified IBM cloud account. This is not a module, it is a terraform configuration that should be cloned or forked to be used.
 
 **This configuration template is written for IBM Cloud Provider version `v0.4.0`**
@@ -12,6 +12,7 @@ You will need to [setup up IBM Cloud provider credentials](#setting-up-provider-
 
 To run this project locally execute the following steps:
 
+- Terraform variables from different directory use -var-file flag 
 - Supply `datacenter`, `public_key`, `key_label`, and `key_note` variable values in `terraform.tfvars`, see https://www.terraform.io/intro/getting-started/variables.html#from-a-file for instructions.
   - Alternatively these values can be supplied via the command line or environment variables, see https://www.terraform.io/intro/getting-started/variables.html.
 - Specifically for `public_key` material see ["Generating a new SSH key and adding it to the ssh-agent"](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)) so that your workstation will use the key.
@@ -77,6 +78,31 @@ On OS X this is achieved by entering the following into your terminal, replacing
 - `export TF_VAR_slapikey=<value>`
 
 However this is only temporary to your current terminal session, to make this permanent add these export statements to your `~/.profile`, `~/.bashrc`, `~/.bash_profile` or preferred terminal configuration file. If you go this route without running `export ...` in your command prompt, you'll need to source your terminal configuration file from the command prompt like so: `source ~/.bashrc` (or your preferred config file).
+
+# Operating Systems
+Operating systems from the REST call 
+https://api.softlayer.com/rest/v3/SoftLayer_Virtual_Guest_Block_Device_Template_Group/getVhdImportSoftwareDescriptions.json?objectMask=referenceCode
+
+"UBUNTU_12_64"
+"DEBIAN_8_32"
+"WIN_2016-STD_64"
+"CENTOS_6_64"
+"WIN_2012-STD-R2_64"
+"CENTOS_7_64"
+"WIN_2003-STD-SP2-5_32"
+"REDHAT_6_32"
+"UBUNTU_12_32"
+"WIN_2012-STD_64"
+"WIN_2008-STD-R2-SP1_64"
+"UBUNTU_16_64"
+"WIN_2003-STD-SP2-5_64"
+"UBUNTU_14_64"
+"UBUNTU_14_32"
+"DEBIAN_8_64"
+"REDHAT_7_64"
+"UBUNTU_16_64"
+"REDHAT_6_64"
+"CENTOS_6_32"
 
 # License
 MIT; see [LICENSE](LICENSE) for details.
