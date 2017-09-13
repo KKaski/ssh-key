@@ -48,6 +48,15 @@ variable vlan_engine1 {
 variable vlan_engine2 {
   description = "Private vlan for engine2 group"
 }
+variable nas_path {
+  description = "NAS mount path"
+}
+variable nas_username {
+  description = "NAS storage username"
+}
+variable nas_password {
+  description = "NAS Storage password"
+}
 
 ##############################################################################
 # IBM SSH Key: For connecting to VMs
@@ -111,7 +120,7 @@ resource "ibm_compute_vm_instance" "win_node" {
   script: |
   <powershell>
     New-NetIPAddress -IPAddress 10.62.129.${count.index+1} -InterfaceAlias 'Ethernet 2'
-    mount '${ibm_storage_file.fs_endurance.mountpoint}' Y:
+    net use k: ${var.nas_path} ${var.nas_password} /user:${var.nas_username}
   </powershell>
   EOF
 }
