@@ -48,7 +48,7 @@ variable vlan_engine1 {
 variable vlan_engine2 {
   description = "Private vlan for engine2 group"
 }
-variable nas_path {
+variable nas_hostname {
   description = "NAS mount path"
 }
 variable nas_username {
@@ -120,7 +120,7 @@ resource "ibm_compute_vm_instance" "win_node" {
   script: |
   <powershell>
     New-NetIPAddress -IPAddress 10.62.129.${count.index+1} -InterfaceAlias 'Ethernet 2'
-    net use k: ${var.nas_path} ${var.nas_password} /user:${var.nas_username}
+    net use k: \\${var.nas_hostname}\${var.nas_username} ${var.nas_password} /user:${var.nas_username} /persistent:yes
   </powershell>
   EOF
 }
