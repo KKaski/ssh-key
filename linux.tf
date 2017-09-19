@@ -16,7 +16,7 @@ resource "ibm_compute_vm_instance" "linux_node" {
   private_network_only = true
   local_disk           = true
   hourly_billing       = true
-  file_storage_ids     = ["${ibm_storage_file.fs_endurance.id}"]
+  #file_storage_ids     = ["${ibm_storage_file.fs_endurance.id}"]
 }
 
 ##############################################################################

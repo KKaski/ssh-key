@@ -71,29 +71,29 @@ resource "ibm_compute_ssh_key" "public_key" {
 ##############################################################################
 # Create Shared File Storage 
 ##############################################################################
-resource "ibm_storage_file" "fs_endurance" {
-        type = "Endurance"
-        datacenter = "${var.datacenter}"
-        capacity = 20
-        iops = 0.25
-
-        snapshot_capacity = 10
-        #hourly_billing       = true
-}
+#resource "ibm_storage_file" "fs_endurance" {
+#        type = "Endurance"
+#        datacenter = "${var.datacenter}"
+#        capacity = 20
+#        iops = 0.25
+#
+#        snapshot_capacity = 10
+#        #hourly_billing       = true
+#}
 
 ##############################################################################
 # Create Shared Block Storage 
 ##############################################################################
-resource "ibm_storage_block" "fs_block" {
-        type = "Performance"
-        datacenter = "${var.datacenter}"
-        capacity = 20
-        iops = 100
-        os_format_type = "Windows 2008+"
-
-        snapshot_capacity = 10  
-        #hourly_billing       = true
-}
+#resource "ibm_storage_block" "fs_block" {
+#        type = "Performance"
+#        datacenter = "${var.datacenter}"
+#        capacity = 20
+#        iops = 100
+#        os_format_type = "Windows 2008+"
+#
+#        snapshot_capacity = 10  
+#        #hourly_billing       = true
+#}
 
 ##############################################################################
 # Create Windows Servers with the SSH keys
@@ -113,7 +113,7 @@ resource "ibm_compute_vm_instance" "win_node" {
   private_network_only = true
   local_disk           = true
   hourly_billing       = true
-  file_storage_ids    = ["${ibm_storage_file.fs_endurance.id}"]
+  #file_storage_ids    = ["${ibm_storage_file.fs_endurance.id}"]
   #block_storage_ids    = ["${ibm_storage_block.fs_block.id}"]
   user_metadata = <<EOF
   #ps1_sysnative
@@ -161,6 +161,6 @@ output "win_node_ip_addresses" {
   value = ["${ibm_compute_vm_instance.win_node.*.ipv4_address_private}"]
   }
 
-output "mountpoint" {
-  value = ["${ibm_storage_file.fs_endurance.mountpoint}"]
-}
+#output "mountpoint" {
+#  value = ["${ibm_storage_file.fs_endurance.mountpoint}"]
+#}
