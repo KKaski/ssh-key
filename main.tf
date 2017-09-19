@@ -119,7 +119,7 @@ resource "ibm_compute_vm_instance" "win_node" {
   #ps1_sysnative
   script: |
   <powershell>
-    New-NetIPAddress -IPAddress 10.62.129.${count.index+1} -InterfaceAlias 'Ethernet 2'
+    New-NetIPAddress -IPAddress 10.10.10.${count.index+1} -InterfaceAlias 'Ethernet 2'
     net use k: \\${var.nas_hostname}\${var.nas_username} ${var.nas_password} /user:${var.nas_username} /persistent:yes
   </powershell>
   EOF
