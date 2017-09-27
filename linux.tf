@@ -35,7 +35,7 @@ resource "ibm_compute_vm_instance" "linux_node" {
   #Create the bootsrap package by zipping the content of bootsrap directory
   #We will populate dynamically the net use command to map an NAS drive
   provisioner "local-exec" {
-      command = "echo net use k: \\${var.nas_hostname}\${var.nas_username} ${var.nas_password} /user:${var.nas_username} /persistent:yes >>bootstrap.bat;rm bootstrap.zip;zip ./bootstrap.zip ./bootstrap/*"
+      command = "echo net use k: \\\\${var.nas_hostname}\\${var.nas_username} ${var.nas_password} /user:${var.nas_username} /persistent:yes >>bootstrap.bat;rm bootstrap.zip;zip ./bootstrap.zip ./bootstrap/*"
   }
 
   # Copies the bootstrap file to the home directory of the http server
