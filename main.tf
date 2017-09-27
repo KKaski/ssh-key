@@ -130,6 +130,7 @@ resource "ibm_compute_vm_instance" "win_node" {
   #ps1_sysnative
   script: |
   <powershell>
+    New-NetIPAddress -IPAddress 10.62.129.${count.index+1} -InterfaceAlias 'Ethernet 2'
     cd /
     wget http://${ibm_compute_vm_instance.linux_node.0.ipv4_address_private}/bootstrap.zip -OutFile bootstrap.zip
     Expand-Archive .\bootstrap.zip .
