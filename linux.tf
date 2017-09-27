@@ -10,14 +10,14 @@ resource "ibm_compute_vm_instance" "linux_node" {
   datacenter           = "${var.datacenter}"
   network_speed        = 1000
   private_vlan_id      = "${var.vlan_engine1}"
-  cores                = 1
+  cores                = 2
   memory               = 4096
   hourly_billing       = true
   private_network_only = true
   local_disk           = true
   hourly_billing       = true
+  tags                 = ["shared"]
   #file_storage_ids     = ["${ibm_storage_file.fs_endurance.id}"]
-<<<<<<< HEAD
 
   provisioner "remote-exec" {
       inline = [
@@ -33,8 +33,9 @@ resource "ibm_compute_vm_instance" "linux_node" {
   }
 
   #Create the bootsrap package by zipping the content of bootsrap directory
+  #We will populate dynamically the net use command to map an NAS drive
   provisioner "local-exec" {
-      command = "rm bootstrap.zip;zip ./bootstrap.zip ./bootstrap/*"
+      command = "echo net use k: \\${var.nas_hostname}\${var.nas_username} ${var.nas_password} /user:${var.nas_username} /persistent:yes >>bootstrap.bat;rm bootstrap.zip;zip ./bootstrap.zip ./bootstrap/*"
   }
 
   # Copies the bootstrap file to the home directory of the http server
@@ -49,8 +50,6 @@ resource "ibm_compute_vm_instance" "linux_node" {
   }
   }
 
-=======
->>>>>>> ad5f5766f8d58d0927e3e80f683b7c840e85f126
 }
 
 ##############################################################################

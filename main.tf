@@ -110,12 +110,13 @@ resource "ibm_compute_vm_instance" "win_node" {
   datacenter           = "${var.datacenter}"
   network_speed        = 1000
   private_vlan_id      = "${var.vlan_engine1}"
-  cores                = 1
-  memory               = 4096
+  cores                = 2
+  memory               = 8192
   hourly_billing       = true
   private_network_only = true
   local_disk           = true
   hourly_billing       = true
+  tags                 = ["engine","customer1"]
   #file_storage_ids    = ["${ibm_storage_file.fs_endurance.id}"]
   #block_storage_ids    = ["${ibm_storage_block.fs_block.id}"]
 
@@ -129,16 +130,11 @@ resource "ibm_compute_vm_instance" "win_node" {
   #ps1_sysnative
   script: |
   <powershell>
-<<<<<<< HEAD
     cd /
     wget http://${ibm_compute_vm_instance.linux_node.0.ipv4_address_private}/bootstrap.zip -OutFile bootstrap.zip
     Expand-Archive .\bootstrap.zip .
     cd bootstrap
     ./bootstrap.bat
-=======
-    New-NetIPAddress -IPAddress 10.10.10.${count.index+1} -InterfaceAlias 'Ethernet 2'
-    net use k: \\${var.nas_hostname}\${var.nas_username} ${var.nas_password} /user:${var.nas_username} /persistent:yes
->>>>>>> ad5f5766f8d58d0927e3e80f683b7c840e85f126
   </powershell>
   EOF
 }
