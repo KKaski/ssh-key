@@ -57,6 +57,9 @@ variable nas_username {
 variable nas_password {
   description = "NAS Storage password"
 }
+variable private_key {
+  description = "Private key to get access to the provisioned servers"
+}
 
 ##############################################################################
 # IBM SSH Key: For connecting to VMs
@@ -71,29 +74,29 @@ resource "ibm_compute_ssh_key" "public_key" {
 ##############################################################################
 # Create Shared File Storage 
 ##############################################################################
-resource "ibm_storage_file" "fs_endurance" {
-        type = "Endurance"
-        datacenter = "${var.datacenter}"
-        capacity = 20
-        iops = 0.25
-
-        snapshot_capacity = 10
-        #hourly_billing       = true
-}
+#resource "ibm_storage_file" "fs_endurance" {
+#        type = "Endurance"
+#        datacenter = "${var.datacenter}"
+#        capacity = 20
+#        iops = 0.25
+#
+#        snapshot_capacity = 10
+#        #hourly_billing       = true
+#}
 
 ##############################################################################
 # Create Shared Block Storage 
 ##############################################################################
-resource "ibm_storage_block" "fs_block" {
-        type = "Performance"
-        datacenter = "${var.datacenter}"
-        capacity = 20
-        iops = 100
-        os_format_type = "Windows 2008+"
-
-        snapshot_capacity = 10  
-        #hourly_billing       = true
-}
+#resource "ibm_storage_block" "fs_block" {
+#        type = "Performance"
+#        datacenter = "${var.datacenter}"
+#        capacity = 20
+#        iops = 100
+#        os_format_type = "Windows 2008+"
+#
+#        snapshot_capacity = 10  
+#        #hourly_billing       = true
+#}
 
 ##############################################################################
 # Create Windows Servers with the SSH keys
@@ -105,25 +108,37 @@ resource "ibm_compute_vm_instance" "win_node" {
   ssh_key_ids          = ["${ibm_compute_ssh_key.public_key.id}"]
   os_reference_code    = "WIN_2012-STD-R2_64"
   datacenter           = "${var.datacenter}"
-  network_speed        = 10
+  network_speed        = 1000
   private_vlan_id      = "${var.vlan_engine1}"
   cores                = 1
-  memory               = 1024
+  memory               = 4096
   hourly_billing       = true
   private_network_only = true
   local_disk           = true
   hourly_billing       = true
-  file_storage_ids    = ["${ibm_storage_file.fs_endurance.id}"]
+  #file_storage_ids    = ["${ibm_storage_file.fs_endurance.id}"]
   #block_storage_ids    = ["${ibm_storage_block.fs_block.id}"]
+
+  # Copies the init script in root
+  #provisioner "file" {
+  #  content     = "./script.bat"
+  #  destination = "/script.bar"
+  #}
+
   user_metadata = <<EOF
   #ps1_sysnative
   script: |
   <powershell>
-    New-NetIPAddress -IPAddress 10.62.129.${count.index+1} -InterfaceAlias 'Ethernet 2'
-    net use k: \\${var.nas_hostname}\${var.nas_username} ${var.nas_password} /user:${var.nas_username} /persistent:yes
+    cd /
+    wget http://${ibm_compute_vm_instance.linux_node.0.ipv4_address_private}/bootstrap.zip -OutFile bootstrap.zip
+    Expand-Archive .\bootstrap.zip .
+    cd bootstrap
+    ./bootstrap.bat
   </powershell>
   EOF
 }
+
+#net use k: ${var.nas_hostname}${var.nas_username} ${var.nas_password} /user:${var.nas_username} /persistent:yes
 
 ##############################################################################
 # IBM DNS Domain: For registering the VMs
@@ -161,6 +176,6 @@ output "win_node_ip_addresses" {
   value = ["${ibm_compute_vm_instance.win_node.*.ipv4_address_private}"]
   }
 
-output "mountpoint" {
-  value = ["${ibm_storage_file.fs_endurance.mountpoint}"]
-}
+#output "mountpoint" {
+#  value = ["${ibm_storage_file.fs_endurance.mountpoint}"]
+#}
