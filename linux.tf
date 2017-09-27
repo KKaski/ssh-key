@@ -17,6 +17,7 @@ resource "ibm_compute_vm_instance" "linux_node" {
   local_disk           = true
   hourly_billing       = true
   #file_storage_ids     = ["${ibm_storage_file.fs_endurance.id}"]
+<<<<<<< HEAD
 
   provisioner "remote-exec" {
       inline = [
@@ -48,6 +49,8 @@ resource "ibm_compute_vm_instance" "linux_node" {
   }
   }
 
+=======
+>>>>>>> ad5f5766f8d58d0927e3e80f683b7c840e85f126
 }
 
 ##############################################################################
